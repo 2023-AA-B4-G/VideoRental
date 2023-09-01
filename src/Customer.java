@@ -18,10 +18,6 @@ public class Customer {
 		this.name = name;
 	}
 
-	public List<Rental> getRentals() {
-		return rentals;
-	}
-
 	public void setRentals(List<Rental> rentals) {
 		this.rentals = rentals;
 	}
@@ -34,7 +30,7 @@ public class Customer {
 	public String getReport() {
 		String result = "Customer Report for " + getName() + "\n";
 
-		List<Rental> rentals = getRentals();
+		List<Rental> rentals = this.rentals;
 
 		double totalCharge = 0;
 		int totalPoint = 0;
@@ -62,30 +58,22 @@ public class Customer {
 	}
 
 	String getRentalList() {
-		String result = "Name: " + getName() + "\tRentals: " + getRentals().size();
-		for (Rental rental : getRentals()) {
+		String result = "Name: " + getName() + "\tRentals: " + rentals.size();
+		for (Rental rental : rentals) {
 			result += rental.getRentalInfo();
 		}
 		return result;
 	}
 
 	void returnVideo(String videoTitle) {
-		List<Rental> customerRentals = getRentals();
-		for (Rental rental : customerRentals) {
-			if (rental.getVideo().getTitle().equals(videoTitle) && rental.getVideo().isRented()) {
-				rental.returnVideo();
-				rental.getVideo().setRented(false);
-				break;
-			}
+		for (Rental rental : rentals) {
+			if (rental.returnVideo(videoTitle)) break;
 		}
 	}
 
 	void rentVideo(Video foundVideo) {
 		Rental rental = new Rental(foundVideo);
-		foundVideo.setRented(true);
-
-		List<Rental> customerRentals = getRentals();
-		customerRentals.add(rental);
-		setRentals(customerRentals);
+		rentals.add(rental);
+		setRentals(rentals);
 	}
 }

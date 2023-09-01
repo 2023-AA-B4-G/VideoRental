@@ -10,20 +10,21 @@ public class Rental {
 		this.video = video ;
 		status = 0 ;
 		rentDate = new Date() ;
+		video.setRented(true);
 	}
 
 	public String getRentalInfo() {
-		return "\tTitle: " + getVideo().getTitle() + " " + "\tPrice Code: " + getVideo().getPriceCode();
+		return "\tTitle: " + video.getTitle() + " " + "\tPrice Code: " + video.getPriceCode();
 	}
 
 	public String getRentalReport() {
-		return "\t" + getVideo().getTitle() + "\tDays rented: " + getDaysRented() + "\tCharge: " + getDaysRented()
+		return "\t" + video.getTitle() + "\tDays rented: " + getDaysRented() + "\tCharge: " + getDaysRented()
 				+ "\tPoint: " + getEachPoint() + "\n";
 	}
 
 	public double getEachCharge() {
 		double eachCharge = 0;
-		switch (getVideo().getPriceCode()) {
+		switch (video.getPriceCode()) {
 		case Video.REGULAR:
 			eachCharge += 2;
 			if (getDaysRented() > 2)
@@ -51,17 +52,14 @@ public class Rental {
 	public int getEachPoint() {
 		int point = 1;
 
-		if ((getVideo().getPriceCode() == Video.NEW_RELEASE) )
+		if ((video.getPriceCode() == Video.NEW_RELEASE) )
 			point++;
 
-		if ( getDaysRented() > getDaysRentedLimit() )
-			point -= Math.min(point, getVideo().getLateReturnPointPenalty()) ;
+		if ( getDaysRented() > getDaysRentedLimit() ) {
+			point -= Math.min(point, video.getLateReturnPointPenalty()) ;
+		}
 
 		return point;
-	}
-
-	public Video getVideo() {
-		return video;
 	}
 
 	public void setVideo(Video video) {
@@ -100,5 +98,16 @@ public class Rental {
 		} else {
 			return video.getLimit();
 		}
+	}
+
+	boolean returnVideo(String videoTitle) {
+		if (video.getTitle().equals(videoTitle)) {
+			if (video.isRented()) {
+				returnVideo();
+				video.setRented(false);
+				return true;
+			}
+		}
+		return false;
 	}
 }
