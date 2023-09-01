@@ -76,10 +76,21 @@ public class VRController {
         return foundCustomer;
     }
 
-    void addVideo(String title, int videoType, int priceCode) {
+    void addVideo(String title, VideoType videoType, PriceCode priceCode) {
         Date registeredDate = new Date();
-        Video video = new Video(title, videoType, priceCode, registeredDate);
+        Video video = createVideo(title, videoType, priceCode, registeredDate);
         videos.add(video);
+    }
+
+    private static Video createVideo(String title, VideoType videoType, PriceCode priceCode, Date registeredDate) {
+        Video video;
+       switch(videoType){
+            case VHS: video = new VHSVideo(title,priceCode,registeredDate); break;
+            case CD: video = new CDVideo(title,priceCode,registeredDate); break;
+            case DVD: video = new DVDVideo(title,priceCode,registeredDate); break;
+           default: video = null; break;
+        }
+        return video;
     }
 
     void addCustomer(String name) {
@@ -130,8 +141,8 @@ public class VRController {
         customers.add(james);
         customers.add(brown);
 
-        Video v1 = new Video("v1", Video.CD, Video.REGULAR, new Date());
-        Video v2 = new Video("v2", Video.DVD, Video.NEW_RELEASE, new Date());
+        Video v1 = createVideo("v1", VideoType.CD, PriceCode.REGULAR, new Date());
+        Video v2 = createVideo("v2", VideoType.DVD, PriceCode.NEW_RELEASE, new Date());
         videos.add(v1);
         videos.add(v2);
 

@@ -103,20 +103,21 @@ public class VRUI {
 
     private void registerVideo() {
         String title = inputVideoTitle();
-        int videoType = inputVideoType();
-        int priceCode = inputVideoPriceCode();
+        VideoType videoType = inputVideoType();
+        PriceCode priceCode = inputVideoPriceCode();
         controller.addVideo(title, videoType, priceCode);
     }
 
-    private int inputVideoPriceCode() {
+    private PriceCode inputVideoPriceCode() {
         System.out.println("Enter price code( 1 for Regular, 2 for New Release ):");
-        int priceCode = scanner.nextInt();
+        PriceCode priceCode = scanner.nextInt();
+
         return priceCode;
     }
 
-    private int inputVideoType() {
+    private VideoType inputVideoType() {
         System.out.println("Enter video type( 1 for VHD, 2 for CD, 3 for DVD ):");
-        int videoType = scanner.nextInt();
+        VideoType videoType = scanner.nextInt();
         return videoType;
     }
 
