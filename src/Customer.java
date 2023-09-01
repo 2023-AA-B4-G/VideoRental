@@ -64,4 +64,38 @@ public class Customer {
 		return result ;
 	}
 
+	void clearRental() {
+		List<Rental> rentals = new ArrayList<Rental>();
+		setRentals(rentals);
+	}
+
+	String getRentalList() {
+		String result = "Name: " + getName() + "\tRentals: " + getRentals().size();
+		for (Rental rental : getRentals()) {
+			result += "\tTitle: " + rental.getVideo().getTitle() + " ";
+			result += "\tPrice Code: " + rental.getVideo().getPriceCode();
+		}
+
+		return result;
+	}
+
+	void returnVideo(String videoTitle) {
+		List<Rental> customerRentals = getRentals();
+		for (Rental rental : customerRentals) {
+			if (rental.getVideo().getTitle().equals(videoTitle) && rental.getVideo().isRented()) {
+				rental.returnVideo();
+				rental.getVideo().setRented(false);
+				break;
+			}
+		}
+	}
+
+	void rentVideo(Video foundVideo) {
+		Rental rental = new Rental(foundVideo);
+		foundVideo.setRented(true);
+
+		List<Rental> customerRentals = getRentals();
+		customerRentals.add(rental);
+		setRentals(customerRentals);
+	}
 }
