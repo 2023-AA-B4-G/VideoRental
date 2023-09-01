@@ -10,10 +10,56 @@ public class Rental {
 		this.video = video ;
 		status = 0 ;
 		rentDate = new Date() ;
+		video.setRented(true);
 	}
 
-	public Video getVideo() {
-		return video;
+	public String getRentalInfo() {
+		return "\tTitle: " + video.getTitle() + " " + "\tPrice Code: " + video.getPriceCode();
+	}
+
+	public String getRentalReport() {
+		return "\t" + video.getTitle() + "\tDays rented: " + getDaysRented() + "\tCharge: " + getDaysRented()
+				+ "\tPoint: " + getEachPoint() + "\n";
+	}
+
+	public double getEachCharge() {
+		double eachCharge = 0;
+		switch (video.getPriceCode()) {
+		case Video.REGULAR:
+			eachCharge += 2;
+			if (getDaysRented() > 2)
+				eachCharge += (getDaysRented() - 2) * 1.5;
+			break;
+		case Video.NEW_RELEASE:
+			eachCharge = getDaysRented() * 3;
+			break;
+		}
+		return eachCharge;
+	}
+
+	public int getDaysRented() {
+		int daysRented = 0;
+		if (getStatus() == 1) { // returned Video
+			long diff = getReturnDate().getTime() - getRentDate().getTime();
+			daysRented = (int) (diff / (1000 * 60 * 60 * 24)) + 1;
+		} else { // not yet returned
+			long diff = new Date().getTime() - getRentDate().getTime();
+			daysRented = (int) (diff / (1000 * 60 * 60 * 24)) + 1;
+		}
+		return daysRented;
+	}
+
+	public int getEachPoint() {
+		int point = 1;
+
+		if ((video.getPriceCode() == Video.NEW_RELEASE) )
+			point++;
+
+		if ( getDaysRented() > getDaysRentedLimit() ) {
+			point -= Math.min(point, video.getLateReturnPointPenalty()) ;
+		}
+
+		return point;
 	}
 
 	public void setVideo(Video video) {
@@ -47,19 +93,21 @@ public class Rental {
 	}
 
 	public int getDaysRentedLimit() {
-		int limit = 0 ;
-		int daysRented ;
-		if (getStatus() == 1) { // returned Video
-			long diff = returnDate.getTime() - rentDate.getTime();
-			daysRented = (int) (diff / (1000 * 60 * 60 * 24)) + 1;
-		} else { // not yet returned
-			long diff = new Date().getTime() - rentDate.getTime();
-			daysRented = (int) (diff / (1000 * 60 * 60 * 24)) + 1;
+		if ( getDaysRented() <= 2) {
+			return 0 ;
+		} else {
+			return video.getLimit();
 		}
-		if ( daysRented <= 2) return limit ;
-
-		limit = video.getLimit();
-		return limit ;
 	}
 
+	boolean returnVideo(String videoTitle) {
+		if (video.getTitle().equals(videoTitle)) {
+			if (video.isRented()) {
+				returnVideo();
+				video.setRented(false);
+				return true;
+			}
+		}
+		return false;
+	}
 }
