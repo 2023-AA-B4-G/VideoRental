@@ -4,9 +4,8 @@ import java.util.List;
 
 public class VRController {
 
-    private List<Customer> customers = new ArrayList<Customer>() ;
-
-    private List<Video> videos = new ArrayList<Video>() ;
+    private List<Customer> customers = new ArrayList<Customer>();
+    private List<Video> videos = new ArrayList<Video>();
 
     void clearRentals(String customerName) {
         Customer foundCustomer = null;
@@ -54,7 +53,9 @@ public class VRController {
         System.out.println("End of list");
     }
 
-    public void returnVideo(Customer foundCustomer, String videoTitle) {
+    public void returnVideo(String customerName, String videoTitle) {
+        Customer foundCustomer = foundCustomer(customerName);
+
         List<Rental> customerRentals = foundCustomer.getRentals();
         for (Rental rental : customerRentals) {
             if (rental.getVideo().getTitle().equals(videoTitle) && rental.getVideo().isRented()) {
@@ -65,7 +66,11 @@ public class VRController {
         }
     }
 
-    Customer findCustomer(String customerName) {
+    boolean isCustomerExist(String customerName) {
+        return foundCustomer(customerName) != null;
+    }
+
+    Customer foundCustomer(String customerName) {
         Customer foundCustomer = null;
         for (Customer customer : customers) {
             if (customer.getName().equals(customerName)) {
@@ -108,28 +113,39 @@ public class VRController {
         foundCustomer.setRentals(customerRentals);
     }
 
-    void rent(String videoTitle, Customer foundCustomer) {
+    void rentVideo(String videoTitle, String CustomerName) {
+        Customer foundCustomer = foundCustomer(CustomerName);
         Video foundVideo = findVideo(videoTitle);
         if (foundVideo == null) return;
 
         createRental(foundVideo, foundCustomer);
     }
 
+    String getReport(String CustomerName) {
+        Customer foundCustomer = foundCustomer(CustomerName);
+        if (foundCustomer == null) {
+            return "No customer found";
+        } else {
+            String result = foundCustomer.getReport();
+            return result;
+        }
+    }
+
     void init() {
-        Customer james = new Customer("James") ;
-        Customer brown = new Customer("Brown") ;
-        customers.add(james) ;
-        customers.add(brown) ;
+        Customer james = new Customer("James");
+        Customer brown = new Customer("Brown");
+        customers.add(james);
+        customers.add(brown);
 
-        Video v1 = new Video("v1", Video.CD, Video.REGULAR, new Date()) ;
-        Video v2 = new Video("v2", Video.DVD, Video.NEW_RELEASE, new Date()) ;
-        videos.add(v1) ;
-        videos.add(v2) ;
+        Video v1 = new Video("v1", Video.CD, Video.REGULAR, new Date());
+        Video v2 = new Video("v2", Video.DVD, Video.NEW_RELEASE, new Date());
+        videos.add(v1);
+        videos.add(v2);
 
-        Rental r1 = new Rental(v1) ;
-        Rental r2 = new Rental(v2) ;
+        Rental r1 = new Rental(v1);
+        Rental r2 = new Rental(v2);
 
-        james.addRental(r1) ;
-        james.addRental(r2) ;
+        james.addRental(r1);
+        james.addRental(r2);
     }
 }
