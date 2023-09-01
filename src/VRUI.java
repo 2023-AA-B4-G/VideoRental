@@ -16,8 +16,8 @@ public class VRUI {
 				case 0: quit = true ; break ;
 				case 1: ui.listCustomers() ; break ;
 				case 2: ui.listVideos() ; break ;
-				case 3: ui.register("customer") ; break ;
-				case 4: ui.register("video") ; break ;
+				case 3: ui.registerCustomer() ; break ;
+				case 4: ui.registerVideo() ; break ;
 				case 5: ui.rentVideo() ; break ;
 				case 6: ui.returnVideo() ; break ;
 				case 7: ui.getCustomerReport() ; break;
@@ -30,12 +30,85 @@ public class VRUI {
 	}
 
 	public void listVideos() {
-
 		controller.listVideos();
 	}
 
 	public void listCustomers() {
 		controller.listCustomers();
+	}
+
+
+	public void clearRentals() {
+		String customerName = inputCustomerName();
+		controller.clearRentals(customerName);
+	}
+
+	public void returnVideo() {
+		String customerName = inputCustomerName();
+		if (!controller.isCustomerExist(customerName)) {
+			return;
+		}
+		String videoTitle = inputVideoTitle();
+
+		controller.returnVideo(customerName, videoTitle);
+	}
+
+	private Customer enterCustomer() {
+		String customerName = inputCustomerName();
+		return controller.foundCustomer(customerName);
+	}
+
+	public void getCustomerReport() {
+		String customerName = inputCustomerName();
+		String report = controller.getReport(customerName);
+
+		System.out.println(report);
+	}
+
+	public void rentVideo() {
+		String customerName = inputCustomerName();
+		if (!controller.isCustomerExist(customerName)) {
+			return;
+		}
+
+		String videoTitle = inputVideoTitle();
+		controller.rentVideo(videoTitle, customerName);
+	}
+
+	private void registerCustomer() {
+		String name = inputCustomerName();
+		controller.addCustomer(name);
+	}
+
+	private void registerVideo() {
+		String title = inputVideoTitle();
+		int videoType = inputVideoType();
+		int priceCode = inputVideoPriceCode();
+		controller.addVideo(title, videoType, priceCode);
+	}
+
+	private int inputVideoPriceCode() {
+		System.out.println("Enter price code( 1 for Regular, 2 for New Release ):");
+		int priceCode = scanner.nextInt();
+		return priceCode;
+	}
+
+	private int inputVideoType() {
+		System.out.println("Enter video type( 1 for VHD, 2 for CD, 3 for DVD ):");
+		int videoType = scanner.nextInt();
+		return videoType;
+	}
+
+	private String inputVideoTitle() {
+		System.out.println("Enter video title: ");
+		String videoTitle = scanner.next();
+		return videoTitle;
+	}
+
+	private String inputCustomerName() {
+		System.out.println("Enter customer name: ");
+		String customerName = scanner.next();
+		return customerName;
 	}
 
 	public int showCommand() {
@@ -53,81 +126,5 @@ public class VRUI {
 		int command = scanner.nextInt() ;
 
 		return command ;
-
-	}
-
-	public void clearRentals() {
-		System.out.println("Enter customer name: ");
-		String customerName = scanner.next();
-
-		controller.clearRentals(customerName);
-	}
-
-	public void returnVideo() {
-		Customer foundCustomer = enterCustomer();
-		if (foundCustomer == null) return;
-
-		String videoTitle = enterVideo();
-		controller.returnVideo(foundCustomer, videoTitle);
-	}
-
-	private String enterVideo() {
-		System.out.println("Enter video title to return: ");
-		String videoTitle = scanner.next();
-		return videoTitle;
-	}
-
-	private Customer enterCustomer() {
-		System.out.println("Enter customer name: ");
-		String customerName = scanner.next();
-
-		return controller.findCustomer(customerName);
-	}
-
-	public void getCustomerReport() {
-		System.out.println("Enter customer name: ");
-		String customerName = scanner.next();
-
-		Customer foundCustomer = controller.findCustomer(customerName);
-
-		if (foundCustomer == null) {
-			System.out.println("No customer found");
-		} else {
-			String result = foundCustomer.getReport();
-			System.out.println(result);
-		}
-	}
-
-	public void rentVideo() {
-		System.out.println("Enter customer name: ");
-		String customerName = scanner.next();
-
-		Customer foundCustomer = controller.findCustomer(customerName);
-
-		if (foundCustomer == null) return;
-
-		System.out.println("Enter video title to rent: ");
-		String videoTitle = scanner.next();
-
-		controller.rent(videoTitle, foundCustomer);
-	}
-
-	public void register(String object) {
-		if (object.equals("customer")) {
-			System.out.println("Enter customer name: ");
-			String name = scanner.next();
-			controller.addCustomer(name);
-		} else {
-			System.out.println("Enter video title to register: ");
-			String title = scanner.next();
-
-			System.out.println("Enter video type( 1 for VHD, 2 for CD, 3 for DVD ):");
-			int videoType = scanner.nextInt();
-
-			System.out.println("Enter price code( 1 for Regular, 2 for New Release ):");
-			int priceCode = scanner.nextInt();
-
-			controller.addVideo(title, videoType, priceCode);
-		}
 	}
 }

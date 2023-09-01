@@ -54,7 +54,9 @@ public class VRController {
         System.out.println("End of list");
     }
 
-    public void returnVideo(Customer foundCustomer, String videoTitle) {
+    public void returnVideo(String customerName, String videoTitle) {
+        Customer foundCustomer = foundCustomer(customerName);
+
         List<Rental> customerRentals = foundCustomer.getRentals();
         for (Rental rental : customerRentals) {
             if (rental.getVideo().getTitle().equals(videoTitle) && rental.getVideo().isRented()) {
@@ -65,7 +67,10 @@ public class VRController {
         }
     }
 
-    Customer findCustomer(String customerName) {
+    boolean isCustomerExist(String customerName) {
+        return foundCustomer(customerName) != null;
+    }
+    Customer foundCustomer(String customerName) {
         Customer foundCustomer = null;
         for (Customer customer : customers) {
             if (customer.getName().equals(customerName)) {
@@ -108,11 +113,22 @@ public class VRController {
         foundCustomer.setRentals(customerRentals);
     }
 
-    void rent(String videoTitle, Customer foundCustomer) {
+    void rentVideo(String videoTitle, String CustomerName) {
+        Customer foundCustomer = foundCustomer(CustomerName);
         Video foundVideo = findVideo(videoTitle);
         if (foundVideo == null) return;
 
         createRental(foundVideo, foundCustomer);
+    }
+
+    String getReport(String CustomerName) {
+        Customer foundCustomer = foundCustomer(CustomerName);
+        if (foundCustomer == null) {
+            return "No customer found";
+        } else {
+            String result = foundCustomer.getReport();
+            return result;
+        }
     }
 
     void init() {
