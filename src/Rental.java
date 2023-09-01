@@ -12,6 +12,45 @@ public class Rental {
 		rentDate = new Date() ;
 	}
 
+	public double getEachCharge(int daysRented) {
+		double eachCharge = 0;
+		switch (getVideo().getPriceCode()) {
+		case Video.REGULAR:
+			eachCharge += 2;
+			if (daysRented > 2)
+				eachCharge += (daysRented - 2) * 1.5;
+			break;
+		case Video.NEW_RELEASE:
+			eachCharge = daysRented * 3;
+			break;
+		}
+		return eachCharge;
+	}
+
+	public int getDaysRented() {
+		int daysRented = 0;
+		if (getStatus() == 1) { // returned Video
+			long diff = getReturnDate().getTime() - getRentDate().getTime();
+			daysRented = (int) (diff / (1000 * 60 * 60 * 24)) + 1;
+		} else { // not yet returned
+			long diff = new Date().getTime() - getRentDate().getTime();
+			daysRented = (int) (diff / (1000 * 60 * 60 * 24)) + 1;
+		}
+		return daysRented;
+	}
+
+	public int getEachPoint(int daysRented) {
+		int point = 1;
+
+		if ((getVideo().getPriceCode() == Video.NEW_RELEASE) )
+			point++;
+
+		if ( daysRented > getDaysRentedLimit() )
+			point -= Math.min(point, getVideo().getLateReturnPointPenalty()) ;
+
+		return point;
+	}
+
 	public Video getVideo() {
 		return video;
 	}
