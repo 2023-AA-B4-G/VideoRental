@@ -67,7 +67,7 @@ public class Customer {
 
 	void returnVideo(String videoTitle) {
 		for (Rental rental : rentals) {
-			if (rental.returnVideo(videoTitle)) break;
+			if (rental.checkVideoTitleAndReturnVideo(videoTitle)) break;
 		}
 	}
 
