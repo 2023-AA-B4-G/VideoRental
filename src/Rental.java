@@ -25,12 +25,12 @@ public class Rental {
 	public double getEachCharge() {
 		double eachCharge = 0;
 		switch (video.getPriceCode()) {
-		case Video.REGULAR:
+		case REGULAR:
 			eachCharge += 2;
 			if (getDaysRented() > 2)
 				eachCharge += (getDaysRented() - 2) * 1.5;
 			break;
-		case Video.NEW_RELEASE:
+		case NEW_RELEASE:
 			eachCharge = getDaysRented() * 3;
 			break;
 		}
@@ -52,7 +52,7 @@ public class Rental {
 	public int getEachPoint() {
 		int point = 1;
 
-		if ((video.getPriceCode() == Video.NEW_RELEASE) )
+		if ((video.getPriceCode() == PriceCode.NEW_RELEASE) )
 			point++;
 
 		if ( getDaysRented() > getDaysRentedLimit() ) {
