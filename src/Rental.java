@@ -12,16 +12,25 @@ public class Rental {
 		rentDate = new Date() ;
 	}
 
-	public double getEachCharge(int daysRented) {
+	public String getRentalInfo() {
+		return "\tTitle: " + getVideo().getTitle() + " " + "\tPrice Code: " + getVideo().getPriceCode();
+	}
+
+	public String getRentalReport() {
+		return "\t" + getVideo().getTitle() + "\tDays rented: " + getDaysRented() + "\tCharge: " + getDaysRented()
+				+ "\tPoint: " + getEachPoint() + "\n";
+	}
+
+	public double getEachCharge() {
 		double eachCharge = 0;
 		switch (getVideo().getPriceCode()) {
 		case Video.REGULAR:
 			eachCharge += 2;
-			if (daysRented > 2)
-				eachCharge += (daysRented - 2) * 1.5;
+			if (getDaysRented() > 2)
+				eachCharge += (getDaysRented() - 2) * 1.5;
 			break;
 		case Video.NEW_RELEASE:
-			eachCharge = daysRented * 3;
+			eachCharge = getDaysRented() * 3;
 			break;
 		}
 		return eachCharge;
@@ -39,13 +48,13 @@ public class Rental {
 		return daysRented;
 	}
 
-	public int getEachPoint(int daysRented) {
+	public int getEachPoint() {
 		int point = 1;
 
 		if ((getVideo().getPriceCode() == Video.NEW_RELEASE) )
 			point++;
 
-		if ( daysRented > getDaysRentedLimit() )
+		if ( getDaysRented() > getDaysRentedLimit() )
 			point -= Math.min(point, getVideo().getLateReturnPointPenalty()) ;
 
 		return point;
