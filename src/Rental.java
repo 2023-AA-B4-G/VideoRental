@@ -100,7 +100,7 @@ public class Rental {
 		}
 	}
 
-	boolean returnVideo(String videoTitle) {
+	boolean checkVideoTitleAndReturnVideo(String videoTitle) {
 		if (video.getTitle().equals(videoTitle)) {
 			if (video.isRented()) {
 				returnVideo();
