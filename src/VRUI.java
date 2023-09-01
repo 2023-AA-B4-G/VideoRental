@@ -110,14 +110,14 @@ public class VRUI {
 
     private PriceCode inputVideoPriceCode() {
         System.out.println("Enter price code( 1 for Regular, 2 for New Release ):");
-        PriceCode priceCode = scanner.nextInt();
+        PriceCode priceCode = PriceCode.findPriceCode(scanner.nextInt());
 
         return priceCode;
     }
 
     private VideoType inputVideoType() {
         System.out.println("Enter video type( 1 for VHD, 2 for CD, 3 for DVD ):");
-        VideoType videoType = scanner.nextInt();
+        VideoType videoType = VideoType.findVideoType(scanner.nextInt());
         return videoType;
     }
 

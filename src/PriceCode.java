@@ -9,4 +9,13 @@ public enum PriceCode {
     public int getValue() {
         return value;
     }
+
+    public static PriceCode findPriceCode(int value) {
+        for (PriceCode code : PriceCode.values()) {
+            if (code.getValue() == value) {
+                return code;
+            }
+        }
+        throw new RuntimeException();
+    }
 }

@@ -9,4 +9,13 @@ public enum VideoType {
     public int getValue() {
         return value;
     }
+
+    public static VideoType findVideoType(int value) {
+        for (VideoType type : VideoType.values()) {
+            if (type.getValue() == value) {
+                return type;
+            }
+        }
+        throw new RuntimeException();
+    }
 }
